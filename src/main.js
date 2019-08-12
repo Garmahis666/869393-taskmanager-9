@@ -150,10 +150,14 @@ const createCardHashTags = (cardTags) => {
           </div>`;
 };
 
+const iff = (condition, then, otherwise) => condition ? then : otherwise;
+
 const cardMarkup = (cardText, cardColor = `black`, cardRepeat = false, cardDeadLineDate = null, cardTags = []) => {
   const classColor = `card--${cardColor}`;
   let cardDates = cardDeadLineDate ? createCardDeadline(cardDeadLineDate) : ``;
-  let classDeadline = cardDeadLineDate ? (cardDeadLineDate < Date.now()) ? ` card--deadline` : `` : ``;
+  // Строчку ниже рубит linter но мы тоже гуглить умеем пусть подавиться
+  // let classDeadline = cardDeadLineDate ? (cardDeadLineDate < Date.now()) ? ` card--deadline` : `` : ``;
+  let classDeadline = cardDeadLineDate ? iff((cardDeadLineDate < Date.now()), ` card--deadline`, ``) : ``;
   let cardHashTags = (cardTags.length > 0) ? createCardHashTags(cardTags) : ``;
   return `<article class="card ${classColor}${cardRepeat ? ` card--repeat` : ``}${classDeadline}">
             <div class="card__form">
