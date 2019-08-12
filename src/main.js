@@ -152,19 +152,9 @@ const createCardHashTags = (cardTags) => {
 
 const cardMarkup = (cardText, cardColor = `black`, cardRepeat = false, cardDeadLineDate = null, cardTags = []) => {
   const classColor = `card--${cardColor}`;
-  let cardDates = ``;
-  let classDeadline = ``;
-  if (cardDeadLineDate) {
-    cardDates = createCardDeadline(cardDeadLineDate);
-    if (cardDeadLineDate < Date.now()) {
-      classDeadline = ` card--deadline`;
-    }
-  }
-  let cardHashTags = ``;
-  if (cardTags.length > 0) {
-    cardHashTags = createCardHashTags(cardTags);
-  }
-
+  let cardDates = cardDeadLineDate ? createCardDeadline(cardDeadLineDate) : ``;
+  let classDeadline = cardDeadLineDate ? (cardDeadLineDate < Date.now()) ? ` card--deadline` : `` : ``;
+  let cardHashTags = (cardTags.length > 0) ? createCardHashTags(cardTags) : ``;
   return `<article class="card ${classColor}${cardRepeat ? ` card--repeat` : ``}${classDeadline}">
             <div class="card__form">
               <div class="card__inner">
@@ -480,7 +470,7 @@ const mainElement = document.querySelector(`.main`);
 const headerElement = document.querySelector(`.main__control`);
 
 const cardsdb = [{text: `Example default task with custom color.`, color: ``, repeat: false, deadLine: null, tags: [], edit: true},
-  {text: `Next example task with deadline`, color: `red`, repeat: false, deadLine: new Date(2019, 7, 10, 12, 0, 0 ), tags: [], edit: false},
+  {text: `Next example task with deadline`, color: `red`, repeat: false, deadLine: new Date(2019, 7, 10, 12, 0, 0), tags: [], edit: false},
   {text: `Next example task with tags`, color: `pink`, repeat: false, deadLine: new Date(2019, 11, 22, 18, 0, 0), tags: [`#День Рождения`, `#Бухаем!`]}];
 
 const render = (container, template, place) => {
@@ -495,13 +485,7 @@ const prepareSite = () => {
   const boardElement = document.querySelector(`.board`);
   const boardTasksElement = boardElement.querySelector(`.board__tasks`);
   cardsdb.forEach(({text, color, repeat, deadLine, tags, edit}) => {
-    let newCard = ``;
-    if (edit) {
-      newCard = cardEditMarkup();
-    }
-    else {
-      newCard = cardMarkup(text, color, repeat, deadLine, tags);
-    }
+    let newCard = edit ? cardEditMarkup() : cardMarkup(text, color, repeat, deadLine, tags);
     render(boardTasksElement, newCard, `beforeEnd`);
   });
   render(boardElement, loadMoreMarkup(), `beforeEnd`);
