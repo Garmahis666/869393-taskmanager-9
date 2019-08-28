@@ -10,6 +10,10 @@ Thumbs.db
 # Вспомогательные файлы
 *.log*
 node_modules/
+*.xml
 
 # Папка с собранными файлами проекта
 build/
+
+# Файлы сборки
+public/bundle*.js*
